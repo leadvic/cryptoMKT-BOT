@@ -1,12 +1,18 @@
-def main(api_key,api_secret,cryptoCurrency):
+def main(api_key,api_secret,minCLP,cryptoCurrency):
     from cryptomarket.exchange.client import Client
-    from time import sleep
+    from marketAnalysis import marketAnalysis
     from sell import sell
     from buy import buy
-    #cryptoCurrency+='CLP'
+    import time
 
     # Connection as the client
-    client = Client(api_key,api_secret)
+    print("Connecting")
+    client=Client(api_key,api_secret)
+
+    # Start counting the program execution time
+    startTime=time.time()
+
+
 
     while True:
 
@@ -20,30 +26,30 @@ def main(api_key,api_secret,cryptoCurrency):
                 break
 
         # Market Analysis
-        print("analising")
-        buy=1
-        sell=0
+        print("Analising")
+        doBuy,doSell,CRY_mean,CRY_stDev=marketAnalysis(client,cryptoCurrency)
 
-
+        # Minimum amount of CryptoCurrency needed to trade
+        minCRY=minCLP/float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"])
 
         # Buy, Sell, Pass, Exit
-        if CLP_available>=1000 and buy==1:
+        if CLP_available>=minCLP and doBuy:
             #Buy CryptoCurrency
             print("Buying")
-            buy(client)
+            buy(client,cryptoCurrency)
 
-        elif CRY_available>=1 and sell==1:
+        elif CRY_available>=minCRY and doSell:
             #Sell CryptoCurrency
             print("Selling")
-            sell(client)
+            sell(client,cryptoCurrency)
 
-        elif CLP_available<1000 and CRY_available<1:
+        elif CLP_available<minCLP and CRY_available<minCRY:
             #Exit Program
             print("Exiting")
-            raise SyntaxError('MUHAHA THIS IS A ERROR')
+            raise SyntaxError('MUHAHA THIS IS AN ERROR')
             return None
 
-        else: #buy==0 & sell==0
+        else: #doBuy & doSell
             #Wait for a while
             print("Waiting")
-            sleep(3600)
+            time.sleep(3600)

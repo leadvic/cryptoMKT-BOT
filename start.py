@@ -6,5 +6,7 @@ api_key=base64.b64decode(sensitive.credentials.api_key).decode()
 api_secret=base64.b64decode(sensitive.credentials.api_secret).decode()
 
 cryptoCurrency='EOS' #'ETH','XLM','BTC','EOS'
+minCLP=1000
 
-main(api_key,api_secret,cryptoCurrency)
+print("Starting")
+main(api_key,api_secret,minCLP,cryptoCurrency)
