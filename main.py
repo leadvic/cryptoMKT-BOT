@@ -1,18 +1,16 @@
-def main(api_key,api_secret,minCLP,cryptoCurrency):
+def main(api_key,api_secret,cryptoCurrency,minCLP):
     from cryptomarket.exchange.client import Client
     from marketAnalysis import marketAnalysis
     from sell import sell
     from buy import buy
     import time
 
-    # Connection as the client
-    print("Connecting")
-    client=Client(api_key,api_secret)
-
     # Start counting the program execution time
     startTime=time.time()
 
-
+    # Connection as the client
+    print("Connecting")
+    client=Client(api_key,api_secret)
 
     while True:
 
@@ -36,12 +34,12 @@ def main(api_key,api_secret,minCLP,cryptoCurrency):
         if CLP_available>=minCLP and doBuy:
             #Buy CryptoCurrency
             print("Buying")
-            buy(client,cryptoCurrency)
+            buy(client,cryptoCurrency,minCLP)
 
         elif CRY_available>=minCRY and doSell:
             #Sell CryptoCurrency
             print("Selling")
-            sell(client,cryptoCurrency)
+            sell(client,cryptoCurrency,minCRY)
 
         elif CLP_available<minCLP and CRY_available<minCRY:
             #Exit Program

@@ -9,4 +9,4 @@ cryptoCurrency='EOS' #'ETH','XLM','BTC','EOS'
 minCLP=1000
 
 print("Starting")
-main(api_key,api_secret,minCLP,cryptoCurrency)
+main(api_key,api_secret,cryptoCurrency,minCLP)
