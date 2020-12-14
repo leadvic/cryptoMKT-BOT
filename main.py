@@ -1,6 +1,7 @@
 def main(api_key,api_secret,cryptoCurrency,minCLP):
     from cryptomarket.exchange.client import Client
     from marketAnalysis import marketAnalysis
+    from writeReport import writeReport
     from recording import recording
     from sell import sell
     from buy import buy
@@ -11,7 +12,7 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
     reportTime=startTime
 
     # An empty list for the record of executed orders
-    records=[]
+    records=[{'Date':'2020-01-01','Side':'sell','Amount':1,'Price':1000,'Total':1000,'Fees':0.1},{'Date':'2020-01-01','Side':'buy','Amount':1,'Price':1000,'Total':1000,'Fees':0.1}]
 
     # Connection as the client
     print("Connecting")
@@ -41,18 +42,24 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
             print("Buying")
             orderPlaced=buy(client,cryptoCurrency,minCLP)
 
-            # Record of Executed Orders
-            print("Recording")
-            records=recording(client,cryptoCurrency,records,orderPlaced)
+            if not orderPlaced:
+                pass
+            else:
+                # Record of Executed Orders
+                print("Recording")
+                records=recording(client,cryptoCurrency,records,orderPlaced)
 
         elif CRY_available>=minCRY and doSell:
             #Sell CryptoCurrency
             print("Selling")
             orderPlaced=sell(client,cryptoCurrency,minCRY)
 
-            # Record of Executed Orders
-            print("Recording")
-            records=recording(client,cryptoCurrency,records,orderPlaced)
+            if not orderPlaced:
+                pass
+            else:
+                # Record of Executed Orders
+                print("Recording")
+                records=recording(client,cryptoCurrency,records,orderPlaced)
 
         elif CLP_available<minCLP and CRY_available<minCRY:
             #Exit Program
@@ -67,5 +74,6 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
 
         # Once a week
         if time.time()-reportTime>604800:
+            print("Reporting")
             writeReport(client,cryptoCurrency,startTime,records)
             reportTime=time.time()

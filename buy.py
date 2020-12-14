@@ -2,6 +2,8 @@ def buy(client,cryptoCurrency,minCLP):
     import pandas as pd
     import time
 
+    startBuying=time.time()
+
     while True:
 
         CRY_bookBuy=pd.DataFrame(client.get_book(market=cryptoCurrency+'CLP', side="buy", limit=50)["data"],dtype=float)
@@ -23,5 +25,9 @@ def buy(client,cryptoCurrency,minCLP):
                 client.cancel_order(id=lastOrder["id"])
                 print("Buying at: ----.-",end="\r")
             except:
-                print("\n")
+                print("")
                 return lastOrder
+
+        if time.time()-startBuying>600:
+            print("")
+            return None

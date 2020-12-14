@@ -2,7 +2,6 @@ def writeReport(client,cryptoCurrency,startTime,records):
     from weasyprint import HTML
     from datetime import datetime
     import pandas as pd
-
     import time
 
     # How many CRY are in the balance
@@ -13,22 +12,22 @@ def writeReport(client,cryptoCurrency,startTime,records):
 
     # How much time has it been running
     seconds=time.time()-startTime
-    days=seconds//(24*3600)
+    days=int(seconds//(24*3600))
     seconds%=(24*3600)
-    hours=time//3600
+    hours=int(seconds//3600)
     seconds%=3600
-    minutes=seconds//60
+    minutes=int(seconds//60)
     seconds%=60
 
     # Today's date
-    today=datetime.now().strftime("%A, %d %B, %Y")
+    today=datetime.now().strftime("%A, %d %B %Y")
 
     records=pd.DataFrame(records)
 
     # Record Summary
-    onlyCRY=CRY_available*float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"])
-    onlySales=sum(records.loc[records["Side"]=="sell"]["Total"])
-    onlyPurchases=sum(records.loc[records["Side"]=="buy"]["Total"])
+    onlyCRY=int(CRY_available*float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"]))
+    onlySales=int(sum(records.loc[records["Side"]=="sell"]["Total"]))
+    onlyPurchases=int(sum(records.loc[records["Side"]=="buy"]["Total"]))
     onlyProfit=onlyCRY+onlySales-onlyPurchases
 
     html="""
@@ -61,15 +60,16 @@ def writeReport(client,cryptoCurrency,startTime,records):
     <p><em>*Its value may vary over time, so this is not a static value.</em></p>
     <p><em>**These are not actual earnings but a profit relative to the value of the {} today.</em></p>
     <h2>Trade Detail</h2>
-    """.format(cryptoCurrency, str(days),str(hours),str(minutes),str(seconds),today,cryptoCurrency,
+    """.format(cryptoCurrency, str(days),str(hours),str(minutes),str(int(seconds)),today,cryptoCurrency,
     str(onlyCRY),str(onlySales),str(onlyPurchases),str(onlyProfit),cryptoCurrency)
 
     html+=records.to_html()
 
     # Write the HTML file
-    f=open('./reports/report.html','wb')
+    f=open('./reports/report.html','w')
     f.write(html)
     f.close()
 
     # Write the report in PDF
     HTML.write_pdf(HTML('./reports/report.html'),'./reports/report.pdf')
+    #HTML.write_pdf(HTML(html),'./reports/report.pdf')

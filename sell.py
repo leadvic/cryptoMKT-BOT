@@ -2,13 +2,16 @@ def sell(client,cryptoCurrency,minCRY):
     import pandas as pd
     import time
 
+    startSelling=time.time()
+    i=0
+
     while True:
 
         CRY_executedOrders=pd.DataFrame(client.get_executed_orders(market=cryptoCurrency+'CLP',limit=50)["data"])
 
         CRY_bookBuy=pd.DataFrame(client.get_book(market=cryptoCurrency+'CLP',side="buy",limit=30)["data"],dtype=float)
         CRY_bookSell=pd.DataFrame(client.get_book(market=cryptoCurrency+'CLP',side="sell",limit=30)["data"],dtype=float)
-        bigSellers=CRY_bookSell[CRY_bookBuy["amount"]>CRY_bookSell.mean()["amount"]]
+        bigSellers=CRY_bookSell[CRY_bookSell["amount"]>CRY_bookSell.mean()["amount"]]
         mostExpensiveBuyer=CRY_bookBuy["price"][0]
 
         CRY_historicalOrders=pd.DataFrame(list((CRY_executedOrders["id"][i],CRY_executedOrders["side"][i],CRY_executedOrders["fills"][i][0]["price"],CRY_executedOrders["fills"][i][0]["amount"],CRY_executedOrders["fills"][i][0]["fee"],CRY_executedOrders["fills"][i][0]["date"]) for i in range (50)),columns=["id","side","price","amount","fee","date"],dtype=float)
@@ -28,7 +31,11 @@ def sell(client,cryptoCurrency,minCRY):
                 client.cancel_order(id=lastOrder["id"])
                 print("Selling at: ----.-",end="\r")
             except:
-                print("\n")
+                print("")
                 return lastOrder
         else:
             print("Not Selling",end="\r")
+
+        if time.time()-startSelling>600:
+            print("")
+            return None
