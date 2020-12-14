@@ -23,4 +23,5 @@ def buy(client,cryptoCurrency,minCLP):
                 client.cancel_order(id=lastOrder["id"])
                 print("Buying at: ----.-",end="\r")
             except:
+                print("\n")
                 return lastOrder

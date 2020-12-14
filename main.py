@@ -1,12 +1,17 @@
 def main(api_key,api_secret,cryptoCurrency,minCLP):
     from cryptomarket.exchange.client import Client
     from marketAnalysis import marketAnalysis
+    from recording import recording
     from sell import sell
     from buy import buy
     import time
 
     # Start counting the program execution time
     startTime=time.time()
+    reportTime=startTime
+
+    # An empty list for the record of executed orders
+    records=[]
 
     # Connection as the client
     print("Connecting")
@@ -30,16 +35,24 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
         # Minimum amount of CryptoCurrency needed to trade
         minCRY=minCLP/float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"])
 
-        # Buy, Sell, Pass, Exit
+        # Buy, Sell, Exit, Wait
         if CLP_available>=minCLP and doBuy:
             #Buy CryptoCurrency
             print("Buying")
-            buy(client,cryptoCurrency,minCLP)
+            orderPlaced=buy(client,cryptoCurrency,minCLP)
+
+            # Record of Executed Orders
+            print("Recording")
+            records=recording(client,cryptoCurrency,records,orderPlaced)
 
         elif CRY_available>=minCRY and doSell:
             #Sell CryptoCurrency
             print("Selling")
-            sell(client,cryptoCurrency,minCRY)
+            orderPlaced=sell(client,cryptoCurrency,minCRY)
+
+            # Record of Executed Orders
+            print("Recording")
+            records=recording(client,cryptoCurrency,records,orderPlaced)
 
         elif CLP_available<minCLP and CRY_available<minCRY:
             #Exit Program
@@ -51,3 +64,8 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
             #Wait for a while
             print("Waiting")
             time.sleep(3600)
+
+        # Once a week
+        if time.time()-reportTime>604800:
+            writeReport(client,cryptoCurrency,startTime,records)
+            reportTime=time.time()

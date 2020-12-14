@@ -28,6 +28,7 @@ def sell(client,cryptoCurrency,minCRY):
                 client.cancel_order(id=lastOrder["id"])
                 print("Selling at: ----.-",end="\r")
             except:
+                print("\n")
                 return lastOrder
         else:
             print("Not Selling",end="\r")
