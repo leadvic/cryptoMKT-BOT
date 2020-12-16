@@ -36,6 +36,6 @@ def sell(client,cryptoCurrency,minCRY):
         else:
             print("Not Selling",end="\r")
 
-        if time.time()-startSelling>600:
+        if time.time()-startSelling>(60*5):
             print("")
             return None

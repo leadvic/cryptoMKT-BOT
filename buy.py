@@ -28,6 +28,6 @@ def buy(client,cryptoCurrency,minCLP):
                 print("")
                 return lastOrder
 
-        if time.time()-startBuying>600:
+        if time.time()-startBuying>(60*5):
             print("")
             return None

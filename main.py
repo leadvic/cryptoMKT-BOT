@@ -73,7 +73,7 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
             time.sleep(3600)
 
         # Once a week
-        if time.time()-reportTime>604800:
+        if time.time()-reportTime>(3600*6):
             print("Reporting")
             writeReport(client,cryptoCurrency,startTime,records)
             reportTime=time.time()
