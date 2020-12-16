@@ -73,7 +73,8 @@ def writeReport(client,cryptoCurrency,startTime,records):
       table.dataframe tbody tr th {text-align: center;}
     </style>
     """
-
+    records["Total"]=records["Total"].astype(int)
+    records["Fees"]=records["Fees"].astype(int)
     html+=records.to_html().replace('<tr style="text-align: right;">','<tr>')
 
     # Write the report in PDF
