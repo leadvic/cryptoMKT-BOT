@@ -11,9 +11,6 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
     startTime=time.time()
     reportTime=startTime
 
-    # An empty list for the record of executed orders
-    records=[{'Date':'2020-01-01','Side':'sell','Amount':1,'Price':1000,'Total':1000,'Fees':0.1},{'Date':'2020-01-01','Side':'buy','Amount':1,'Price':1000,'Total':1000,'Fees':0.1}]
-
     # Connection as the client
     print("Connecting")
     client=Client(api_key,api_secret)
@@ -30,7 +27,7 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
                 break
 
         # Market Analysis
-        print("Analising")
+        print("Analyzing")
         doBuy,doSell,CRY_mean,CRY_stDev=marketAnalysis(client,cryptoCurrency)
 
         # Minimum amount of CryptoCurrency needed to trade
@@ -42,24 +39,18 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
             print("Buying")
             orderPlaced=buy(client,cryptoCurrency,minCLP)
 
-            if not orderPlaced:
-                pass
-            else:
-                # Record of Executed Orders
-                print("Recording")
-                records=recording(client,cryptoCurrency,records,orderPlaced)
+            # Record of Executed Orders
+            print("Recording")
+            recording(client,cryptoCurrency,orderPlaced)
 
         elif CRY_available>=minCRY and doSell:
             #Sell CryptoCurrency
             print("Selling")
             orderPlaced=sell(client,cryptoCurrency,minCRY)
 
-            if not orderPlaced:
-                pass
-            else:
-                # Record of Executed Orders
-                print("Recording")
-                records=recording(client,cryptoCurrency,records,orderPlaced)
+            # Record of Executed Orders
+            print("Recording")
+            recording(client,cryptoCurrency,orderPlaced)
 
         elif CLP_available<minCLP and CRY_available<minCRY:
             #Exit Program
@@ -70,10 +61,10 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
         else: #doBuy & doSell
             #Wait for a while
             print("Waiting")
-            time.sleep(3600)
+            time.sleep(3600/2)
 
         # Once a week
         if time.time()-reportTime>(3600*6):
             print("Reporting")
-            writeReport(client,cryptoCurrency,startTime,records)
+            writeReport(client,cryptoCurrency,startTime)
             reportTime=time.time()

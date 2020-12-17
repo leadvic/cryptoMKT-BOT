@@ -1,10 +1,16 @@
-def recording(client,cryptoCurrency,records,orderPlaced):
+def recording(client,cryptoCurrency,orderPlaced):
+    import pandas as pd
 
-    lastExecuted=client.get_executed_orders(market=cryptoCurrency+'CLP')[0]
+    if not orderPlaced:
+        pass
+    else:
+        lastExecuted=client.get_executed_orders(market=cryptoCurrency+'CLP')[0]
+        if orderPlaced["id"]==lastExecuted["id"]:
+            if lastExecuted["side"]=="sell":
+                record=pd.DataFrame([{'Date':lastExecuted["updated_at"],'Side':lastExecuted["side"],'Amount':float(lastExecuted["amount"]["executed"]),'Price':float(lastExecuted["price"]),'Total':float(lastExecuted["fills"][0]["amount"]),'Fees':float(lastExecuted["fee"])}])
+            else:   # lastExecuted["side"]=="buy"
+                record=pd.DataFrame([{'Date':lastExecuted["updated_at"],'Side':lastExecuted["side"],'Amount':float(lastExecuted["amount"]["executed"]),'Price':float(lastExecuted["price"]),'Total':float(lastExecuted["amount"]["executed"])*float(lastExecuted["price"]),'Fees':float(lastExecuted["fee"])*float(lastExecuted["price"])}])
 
-    if orderPlaced["id"]==lastExecuted["id"]:
-        if lastExecuted["side"]=="sell":
-            records.insert(0,{'Date':lastExecuted["updated_at"],'Side':lastExecuted["side"],'Amount':float(lastExecuted["amount"]["executed"]),'Price':float(lastExecuted["price"]),'Total':float(lastExecuted["fills"][0]["amount"]),'Fees':float(lastExecuted["fee"])})
-        else:   # lastExecuted["side"]=="buy"
-            records.insert(0,{'Date':lastExecuted["updated_at"],'Side':lastExecuted["side"],'Amount':float(lastExecuted["amount"]["executed"]),'Price':float(lastExecuted["price"]),'Total':float(lastExecuted["amount"]["executed"])*float(lastExecuted["price"]),'Fees':float(lastExecuted["fee"])*float(lastExecuted["price"])})
-    return records
+            record.to_csv('./reports/records.csv',sep=',',header=None,mode='a',index=False)
+
+    return None

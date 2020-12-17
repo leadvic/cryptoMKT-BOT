@@ -1,4 +1,4 @@
-def writeReport(client,cryptoCurrency,startTime,records):
+def writeReport(client,cryptoCurrency,startTime):
     from weasyprint import HTML
     from datetime import datetime
     import pandas as pd
@@ -22,7 +22,7 @@ def writeReport(client,cryptoCurrency,startTime,records):
     # Today's date
     today=datetime.now().strftime("%A, %d %B %Y")
 
-    records=pd.DataFrame(records)
+    records=pd.read_csv('./reports/records.csv')
 
     # Record Summary
     onlyCRY=int(CRY_available*float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"]))
@@ -78,4 +78,4 @@ def writeReport(client,cryptoCurrency,startTime,records):
     html+=records.to_html().replace('<tr style="text-align: right;">','<tr>')
 
     # Write the report in PDF
-    HTML.write_pdf(HTML(html),'./reports/report.pdf')
+    HTML(string=html).write_pdf('./reports/report.pdf')
