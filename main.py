@@ -1,4 +1,4 @@
-def main(api_key,api_secret,cryptoCurrency,minCLP):
+def main(api_key,api_secret,cryptoCurrency,minCLP,startTime):
     from cryptomarket.exchange.client import Client
     from marketAnalysis import marketAnalysis
     from writeReport import writeReport
@@ -8,7 +8,6 @@ def main(api_key,api_secret,cryptoCurrency,minCLP):
     import time
 
     # Start counting the program execution time
-    startTime=time.time()
     reportTime=startTime
 
     # Connection as the client
