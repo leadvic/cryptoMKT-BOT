@@ -15,11 +15,11 @@ def buy(client,cryptoCurrency,minCLP):
         firstBigBuyerPrice=bigBuyers["price"][bigBuyers.index[0]]
         lastPrice=firstBigBuyerPrice+0.5
 
-        if (lastPrice<cheapestSeller):
+        if lastPrice<cheapestSeller:
 
             lastOrder=client.create_order(market=cryptoCurrency+'CLP', type="limit", amount=str(minCLP/lastPrice), price=lastPrice, side="buy")
             print("Buying at:",lastPrice,end="\r")
-            time.sleep(5)
+            time.sleep(8)
 
             try:
                 client.cancel_order(id=lastOrder["id"])

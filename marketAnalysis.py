@@ -45,10 +45,10 @@ def marketAnalysis(client,cryptoCurrency):
     ultraShortSlope=model.params[1]
 
     #
-    if ultraShortIntercept<0:
+    if ultraShortSlope<0:
         doBuy=True
         doSell=False
-    elif ultraShortIntercept>0:
+    elif ultraShortSlope>0:
         doBuy=False
         doSell=True
     else:

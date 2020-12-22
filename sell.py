@@ -21,11 +21,11 @@ def sell(client,cryptoCurrency,minCRY):
         firstBigSellerPrice=bigSellers["price"][bigSellers.index[0]]
         lastPrice=firstBigSellerPrice-0.5
 
-        if lastPrice>mostExpensiveBuyer and lastPrice>worstPurchase+50:
+        if lastPrice>mostExpensiveBuyer:
 
             lastOrder=client.create_order(market=cryptoCurrency+'CLP', type="limit", amount=minCRY, price=lastPrice, side="sell")
             print("Selling at:",lastPrice,end="\r")
-            time.sleep(5)
+            time.sleep(8)
 
             try:
                 client.cancel_order(id=lastOrder["id"])
