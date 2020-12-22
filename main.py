@@ -3,6 +3,7 @@ def main(api_key,api_secret,cryptoCurrency,minCLP,startTime):
     from marketAnalysis import marketAnalysis
     from writeReport import writeReport
     from recording import recording
+    from sendMail import sendMail
     from sell import sell
     from buy import buy
     import time
@@ -66,4 +67,6 @@ def main(api_key,api_secret,cryptoCurrency,minCLP,startTime):
         if time.time()-reportTime>(3600*6):
             print("Reporting")
             writeReport(client,cryptoCurrency,startTime)
+            print("Sending Report")
+            sendMail()
             reportTime=time.time()

@@ -1,10 +1,10 @@
+import sensitive.credentials as credential
 from main import main
-import sensitive.credentials
 import base64
 import time
 
-api_key=base64.b64decode(sensitive.credentials.api_key).decode()
-api_secret=base64.b64decode(sensitive.credentials.api_secret).decode()
+api_key=base64.b64decode(credential.api_key).decode()
+api_secret=base64.b64decode(credential.api_secret).decode()
 
 cryptoCurrency='EOS' #'ETH','XLM','BTC','EOS'
 minCLP=1000
