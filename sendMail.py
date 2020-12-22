@@ -10,7 +10,7 @@ def sendMail():
     msg['Subject']='Transaction Report - CryptoMKT'
     msg['From']=email_BOT
     msg['To']='thisisyouremail@mail.com'
-    msg.set_content('this email was sent automatically, please do not reply\nReport is attached.')
+    msg.set_content('This email was sent automatically, please do not reply\nReport is attached.')
 
     with open('./reports/report.pdf','rb') as file:
         file_data=file.read()
