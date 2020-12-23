@@ -28,7 +28,7 @@ def main(api_key,api_secret,cryptoCurrency,minCLP,startTime):
 
         # Market Analysis
         print("Analyzing")
-        doBuy,doSell,CRY_mean,CRY_stDev=marketAnalysis(client,cryptoCurrency)
+        doBuy,doSell=marketAnalysis(client,cryptoCurrency)
 
         # Minimum amount of CryptoCurrency needed to trade
         minCRY=minCLP/float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"])

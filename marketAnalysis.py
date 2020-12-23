@@ -44,15 +44,17 @@ def marketAnalysis(client,cryptoCurrency):
     ultraShortIntercept=model.params[0]
     ultraShortSlope=model.params[1]
 
+    lastPrice=float(client.get_ticker(market="EOSCLP")["data"][0]["last_price"])
+
     #
-    if ultraShortSlope<0:
+    if ultraShortSlope<0 or lastPrice<CRY_meanValue-CRY_standardDeviation*0.6:
         doBuy=True
         doSell=False
-    elif ultraShortSlope>0:
+    elif ultraShortSlope>0 or lastPrice>CRY_meanValue+CRY_standardDeviation*0.6:
         doBuy=False
         doSell=True
     else:
         doBuy=False
         doSell=False
 
-    return doBuy,doSell,CRY_meanValue,CRY_standardDeviation
+    return doBuy,doSell
