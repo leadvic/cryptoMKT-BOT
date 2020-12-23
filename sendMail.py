@@ -1,4 +1,4 @@
-def sendMail():
+def sendMail(emailAddress):
     import sensitive.credentials as credential
     from email.message import EmailMessage
     import smtplib
@@ -9,7 +9,7 @@ def sendMail():
     msg=EmailMessage()
     msg['Subject']='Transaction Report - CryptoMKT'
     msg['From']=email_BOT
-    msg['To']='thisisyouremail@mail.com'
+    msg['To']=emailAddress
     msg.set_content('This email was sent automatically, please do not reply\nReport is attached.')
 
     with open('./reports/report.pdf','rb') as file:

@@ -1,4 +1,4 @@
-def writeReport(client,cryptoCurrency,startTime):
+def writeReport(client,cryptoCurrency,initialInvestemnt,startTime):
     from weasyprint import HTML
     from datetime import datetime
     import pandas as pd
@@ -29,7 +29,7 @@ def writeReport(client,cryptoCurrency,startTime):
     onlyCLP=int(float(client.get_balance()[3]["balance"]))
     onlySales=int(sum(records.loc[records["Side"]=="sell"]["Total"]))
     onlyPurchases=int(sum(records.loc[records["Side"]=="buy"]["Total"]))
-    onlyProfit=onlyCRY+onlyCLP+onlySales-onlyPurchases
+    onlyProfit=onlyCRY+onlyCLP+onlySales-onlyPurchases-initialInvestemnt
 
     # HTML Investment Report
 
@@ -71,6 +71,10 @@ def writeReport(client,cryptoCurrency,startTime):
     <td>{}</td>
     </tr>
     <tr>
+    <td>Initial Investment</td>
+    <td>{}</td>
+    </tr>
+    <tr>
     <td>Relative Profit Estimate</td>
     <td>{}**</td>
     </tr>
@@ -79,7 +83,7 @@ def writeReport(client,cryptoCurrency,startTime):
     <p><em>*Its value may vary over time, so this is not a static value.</em></p>
     <p><em>**These are not actual earnings but a profit relative to the value of the {} today.</em></p>
     <h2>Trade Detail</h2>
-    """.format(cryptoCurrency, str(days),str(hours),str(minutes),str(int(seconds)),today,cryptoCurrency,str(onlyCRY),str(onlyCLP),str(onlySales),str(onlyPurchases),str(onlyProfit),cryptoCurrency)
+    """.format(cryptoCurrency, str(days),str(hours),str(minutes),str(int(seconds)),today,cryptoCurrency,str(onlyCRY),str(onlyCLP),str(onlySales),str(onlyPurchases),str(initialInvestemnt),str(onlyProfit),cryptoCurrency)
 
     records["Total"]=records["Total"].astype(int)
     records["Fees"]=records["Fees"].astype(int)

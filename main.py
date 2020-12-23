@@ -1,4 +1,4 @@
-def main(api_key,api_secret,cryptoCurrency,minCLP,startTime):
+def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,minCLP,emailAddress,startTime):
     from cryptomarket.exchange.client import Client
     from marketAnalysis import marketAnalysis
     from writeReport import writeReport
@@ -63,10 +63,10 @@ def main(api_key,api_secret,cryptoCurrency,minCLP,startTime):
             print("Waiting")
             time.sleep(3600/2)
 
-        # Once a week
-        if time.time()-reportTime>(3600*6):
+        # Twice Daily
+        if time.time()-reportTime>(3600*12):
             print("Reporting")
-            writeReport(client,cryptoCurrency,startTime)
+            writeReport(client,cryptoCurrency,initialInvestemnt,startTime)
             print("Sending Report")
-            sendMail()
+            sendMail(emailAddress)
             reportTime=time.time()
