@@ -11,10 +11,11 @@ def marketAnalysis(client,cryptoCurrency):
     ultraShortTermPrices=client.get_prices(market=cryptoCurrency+'CLP',timeframe=15)["bid"]
 
     #
-    dataLong=pd.DataFrame(longTermPrices)
-##    dataMedium=pd.DataFrame(mediumTermPrices)
-##    dataShort=pd.DataFrame(shortTermPrices)
-    dataUltraShort=pd.DataFrame(ultraShortTermPrices)
+    dataLong=pd.DataFrame(longTermPrices).sort_values(by='candle_date', ascending=True)
+##    dataMedium=pd.DataFrame(mediumTermPrices).sort_values(by='candle_date', ascending=True)
+##    dataShort=pd.DataFrame(shortTermPrices).sort_values(by='candle_date', ascending=True)
+    dataUltraShort=pd.DataFrame(ultraShortTermPrices).sort_values(by='candle_date', ascending=True)
+
 
     #
     CRY_meanValue=statistics.mean(dataLong['close_price'].values.astype(np.float))
