@@ -4,6 +4,8 @@ def marketAnalysis(client,cryptoCurrency):
     import numpy as np
     import statistics
 
+    lastPrice=float(client.get_ticker(market=cryptoCurrency+"CLP")["data"][0]["last_price"])
+
     #
     longTermPrices=client.get_prices(market=cryptoCurrency+'CLP',timeframe=10080)["bid"]
 ##    mediumTermPrices=client.get_prices(market=cryptoCurrency+'CLP',timeframe=1440)["bid"]
@@ -15,7 +17,7 @@ def marketAnalysis(client,cryptoCurrency):
 ##    dataMedium=pd.DataFrame(mediumTermPrices).sort_values(by='candle_date', ascending=True)
 ##    dataShort=pd.DataFrame(shortTermPrices).sort_values(by='candle_date', ascending=True)
     dataUltraShort=pd.DataFrame(ultraShortTermPrices).sort_values(by='candle_date', ascending=True)
-
+    dataUltraShort.at[-1,:]=lastPrice
 
     #
     CRY_meanValue=statistics.mean(dataLong['close_price'].values.astype(np.float))
@@ -44,8 +46,6 @@ def marketAnalysis(client,cryptoCurrency):
     model=sm.OLS(y,x).fit()
     ultraShortIntercept=model.params[0]
     ultraShortSlope=model.params[1]
-
-    lastPrice=float(client.get_ticker(market="EOSCLP")["data"][0]["last_price"])
 
     #
     if ultraShortSlope<0 or lastPrice<CRY_meanValue-CRY_standardDeviation*0.6:
