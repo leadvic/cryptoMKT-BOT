@@ -4,7 +4,7 @@ def marketAnalysis(client,cryptoCurrency):
     import numpy as np
     import statistics
 
-    lastPrice=float(client.get_ticker(market=cryptoCurrency+"CLP")["data"][0]["last_price"])
+    lastPrice=float(client.get_ticker(market=cryptoCurrency+'CLP')["data"][0]["last_price"])
 
     #
     longTermPrices=client.get_prices(market=cryptoCurrency+'CLP',timeframe=10080)["bid"]
