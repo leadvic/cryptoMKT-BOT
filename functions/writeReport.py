@@ -1,6 +1,6 @@
 def writeReport(client,cryptoCurrency,initialInvestemnt,startTime):
-    from weasyprint import HTML
     from datetime import datetime
+    from weasyprint import HTML
     import pandas as pd
     import time
 

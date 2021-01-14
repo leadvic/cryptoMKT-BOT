@@ -1,11 +1,11 @@
-def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,minCLP,emailAddress,startTime):
+def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,emailAddress,startTime):
     from cryptomarket.exchange.client import Client
-    from marketAnalysis import marketAnalysis
-    from writeReport import writeReport
-    from recording import recording
-    from sendMail import sendMail
-    from sell import sell
-    from buy import buy
+    from functions.marketAnalysis import marketAnalysis
+    from functions.writeReport import writeReport
+    from functions.recording import recording
+    from functions.sendMail import sendMail
+    from functions.sell import sell
+    from functions.buy import buy
     import time
 
     # Start counting the program execution time
@@ -29,6 +29,7 @@ def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,minCLP,emailAddress
         # Market Analysis
         print("Analyzing")
         doBuy,doSell=marketAnalysis(client,cryptoCurrency)
+        minCLP=2000
 
         # Minimum amount of CryptoCurrency needed to trade
         minCRY=minCLP/float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"])
