@@ -1,4 +1,5 @@
 def buy(client,cryptoCurrency,minCLP):
+    from data import infoCRY
     import pandas as pd
     import time
 
@@ -11,9 +12,8 @@ def buy(client,cryptoCurrency,minCLP):
         bigBuyers=CRY_bookBuy[CRY_bookBuy["amount"]>CRY_bookBuy.mean()["amount"]]
         cheapestSeller=CRY_bookSell["price"][0]
 
-
         firstBigBuyerPrice=bigBuyers["price"][bigBuyers.index[0]]
-        lastPrice=firstBigBuyerPrice+0.5
+        lastPrice=firstBigBuyerPrice+infoCRY.minStepCRY[cryptoCurrency]
 
         if lastPrice<cheapestSeller:
 
