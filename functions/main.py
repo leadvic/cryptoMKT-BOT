@@ -1,6 +1,9 @@
-def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,emailAddress,startTime):
+def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,profitExpected,emailAddress,startTime):
     from cryptomarket.exchange.client import Client
     from functions.marketAnalysis import marketAnalysis
+    from functions.sellEverything import sellEverything
+    from functions.profitReached import profitReached
+    from functions.withdrawItAll import withdrawItAll
     from functions.writeReport import writeReport
     from functions.recording import recording
     from functions.sendMail import sendMail
@@ -28,44 +31,40 @@ def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,emailAddress,startT
 
         # Market Analysis
         print("Analyzing")
-        doBuy,doSell=marketAnalysis(client,cryptoCurrency)
-        minCLP=2000
+        doBuy,doSell,minCLP,minCRY=marketAnalysis(client,cryptoCurrency,initialInvestemnt,CLP_available,CRY_available)
 
-        # Minimum amount of CryptoCurrency needed to trade
-        minCRY=minCLP/float(client.get_ticker(market=cryptoCurrency+'CLP')[0]["last_price"])
-
-        # Buy, Sell, Exit, Wait
+        # Buy, Sell or Wait
         if CLP_available>=minCLP and doBuy:
             #Buy CryptoCurrency
             print("Buying")
             orderPlaced=buy(client,cryptoCurrency,minCLP)
-
-            # Record of Executed Orders
-            print("Recording")
-            recording(client,cryptoCurrency,orderPlaced)
 
         elif CRY_available>=minCRY and doSell:
             #Sell CryptoCurrency
             print("Selling")
             orderPlaced=sell(client,cryptoCurrency,minCRY)
 
-            # Record of Executed Orders
-            print("Recording")
-            recording(client,cryptoCurrency,orderPlaced)
-
-        elif CLP_available<minCLP and CRY_available<minCRY:
-            #Exit Program
-            print("Exiting")
-            raise SyntaxError('MUHAHA THIS IS AN ERROR')
-            return None
-
-        else: #doBuy & doSell
-            #Wait for a while
+        else:
+            # Wait for a while
             print("Waiting")
             time.sleep(3600/2)
+            orderPlaced=None
 
-        # Twice Daily
-        if time.time()-reportTime>(3600*12):
+        # Record of Executed Orders
+        print("Recording")
+        recording(client,cryptoCurrency,orderPlaced)
+
+        # End the program if the expected benefits were obtained
+        if profitReached(client,cryptoCurrency,initialInvestemnt,profitExpected,CLP_available,CRY_available):
+            print("The expected benefits were obtained")
+            amountCLP=sellEverything(client,cryptoCurrency)
+            print("Withdrawing all the money")
+            withdrawItAll(client,amountCLP)
+            print("Ending Program")
+            return None
+
+        # If the expected benefits were not obtained, a report is sent daily
+        elif time.time()-reportTime>(3600*24):
             print("Reporting")
             writeReport(client,cryptoCurrency,initialInvestemnt,startTime)
             print("Sending Report")
