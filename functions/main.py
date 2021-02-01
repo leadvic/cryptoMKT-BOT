@@ -47,7 +47,7 @@ def main(api_key,api_secret,cryptoCurrency,initialInvestemnt,profitExpected,emai
         else:
             # Wait for a while
             print("Waiting")
-            time.sleep(3600/2)
+            time.sleep(3600/4)
             orderPlaced=None
 
         # Record of Executed Orders
