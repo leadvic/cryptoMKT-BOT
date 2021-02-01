@@ -16,7 +16,7 @@ def sendMail(emailAddress):
         file_data=file.read()
         file_name=file.name
 
-    msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+    msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename='report.pdf')
 
     with smtplib.SMTP_SSL("smtp.yandex.com",465) as smtp:
         smtp.login(email_BOT,pass_BOT)
