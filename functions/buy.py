@@ -21,12 +21,17 @@ def buy(client,cryptoCurrency,minCLP):
             print("Buying at:",lastPrice,end="\r")
             time.sleep(8)
 
-            try:
+            if float(client.get_order_status(id=lastOrder["id"])["amount"]["executed"])==0:
                 client.cancel_order(id=lastOrder["id"])
                 print("Buying at: ----.-",end="\r")
-            except:
-                print("")
-                return lastOrder
+            else:
+                try:
+                    client.cancel_order(id=lastOrder["id"])
+                except:
+                    pass
+                finally:
+                    print("")
+                    return lastOrder
 
         if time.time()-startBuying>(60*5):
             print("")
