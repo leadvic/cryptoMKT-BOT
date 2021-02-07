@@ -29,7 +29,7 @@ def writeReport(client,cryptoCurrency,initialInvestemnt,startTime):
     onlyCLP=int(float(client.get_balance()[3]["balance"]))
     onlySales=int(sum(records.loc[records["Side"]=="sell"]["Total"]))
     onlyPurchases=int(sum(records.loc[records["Side"]=="buy"]["Total"]))
-    onlyProfit=onlyCRY+onlyCLP+onlySales-onlyPurchases-initialInvestemnt
+    onlyProfit=onlyCRY+onlyCLP-initialInvestemnt
 
     # HTML Investment Report
 
